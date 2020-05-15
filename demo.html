@@ -1,71 +1,251 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>SeqRQ-AE - demo</title>
+    <title>Multi-speaker SeqRQ-AE - demo</title>
     <link rel="stylesheet" type="text/css" href="./stylesheet.css"/>
   </head>
   <body>
     <article>
       <header>
-        <h1>Towards Unsupervised Speech Recognition and Synthesis with Quantized Speech Representation Learning</h1>
+        <h1>Semi-supervised Learning for Multi-speaker Text-to-speech Synthesis Using Discrete Speech Representation</h1>
       </header>
     </article>
 
-    <div><b>Paper:</b> <a href="https://arxiv.org/abs/1910.12729">arXiv</a>
-    <div><b>Authors:</b> Alexander H. Liu <small>(co-first)</small>, Tao Tu <small>(co-first)</small>, Hung-yi Lee, Lin-shan Lee</div>
+    <div><b>Paper:</b> <a href="">arXiv</a>
+    <div><b>Authors:</b> Tao Tu, Yuan-Jui Chen, Alexander H. Liu, Hung-yi Lee, Lin-shan Lee</div>
     <div> </div>
-    <div style="width:96%"><b>Abstract:</b> In this paper we propose a Sequential Representation Quantization AutoEncoder (SeqRQ-AE) to learn from primarily unpaired audio data and produce sequences of representations very close to phoneme sequences of speech utterances. This is achieved by proper temporal segmentation to make the representations phoneme-synchronized, and proper phonetic clustering to have total number of distinct representations close to the number of phonemes. Mapping between the distinct representations and phonemes is learned from a small amount of annotated paired data. Preliminary experiments on LJSpeech demonstrated the learned representations for vowels have relative locations in latent space in good parallel to that shown in the IPA vowel chart defined by linguistics experts. With less than 20 minutes of annotated speech, our method outperformed existing methods on phoneme recognition and is able to synthesize intelligible speech that beats our baseline model.</div>
+    <div style="width:96%"><b>Abstract:</b> Recently, end-to-end multi-speaker text-to-speech (TTS) systems gain success in the situation where a lot of high-quality speech plus their corresponding transcriptions are available.
+    However, laborious paired data collection processes prevent many institutes from building multi-speaker TTS systems of great performance.
+    In this work, we propose a semi-supervised learning approach for multi-speaker TTS.
+    A multi-speaker TTS model can learn from the untranscribed audio via the proposed encoder-decoder framework with discrete speech representation.
+    The experiment results demonstrate that with only an hour of paired speech data, no matter the paired data is from multiple speakers or a single speaker, the proposed model can generate intelligible speech in different voices.
+    We found the model can benefit from the proposed semi-supervised learning approach even when part of the unpaired speech data is noisy.
+    In addition, our analysis reveals that different speaker characteristics of the paired data have an impact on the effectiveness of semi-supervised TTS..</div>
 
     <div>
-      <h3>High-quality Audio Samples</h3>
-      This section demonstrates examples of synthesized speech produced by the proposed SeqRQ-AE. All utterances were drawn from the test set. </br>
-      Note that the following changes are made (w.r.t. the setting in the paper) for higher synthesized speech quality:
-      <ul style="list-style-type:disc;">
-        <li>An additional entry of the codebook is used for representing all punctuations</li>
-        <li>The decoder predicts 3 frames per decoding step instead of 5</li>
-        <li>WaveNet is adopted to transform mel-spectrogram into waveform</li>
-        <li>The weight of unpaired speech reconstruction (i.e. <math>&lambda;<sub>2</sub></math> in <math>Eq.7</math>) is set to 10</li>
-      </ul> 
-
+      <h3>Audio Samples</h3>
+      This section shows examples of synthesized speech produced by the proposed multi-speaker SeqRQ-AE. All utterances were drawn from the test set. </br>
+      <br><br>
       <table style="width:96%;">
         <tr>
           <td></td>
-          <td><center>20 Minutes Paired Data</center></td>
-          <td><center>10 Minutes Paired Data</center></td>
-          <td><center>Ground Truth</center></td>
+          <td><center>(b-1) Ground Truth</center></td>
+          <td><center>(b-2) Tacotorn-2</center></td>
+          <td><center>(b-3) Tacotorn-2</center></td>
+          <td><center>(s-1) Sp-chain</center></td>
+          <td><center>(s-2) Ours</center></td>
+          <td><center>(s-3) Sp-chain</center></td>
+          <td><center>(s-4) Ours</center></td>
         </tr>
         <tr>
-          <td style="width:30%;" class="transcript">“in being comparatively modern.”</td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ours_20min_hq/LJ001-0002.wav"></audio></td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ours_10min_hq/LJ001-0002.wav"></audio></td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ground_truth/LJ001-0002.wav"></audio></td>
+          <td style="width:20%;" class="transcript">“Because we do not need it.”</td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/gt/p228_027.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/fully-sup/p228_027-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/fully-sup-1hr/p228_027-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/sp-chain-vctk-1hr/p228_027-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr/p228_027-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/sp-chain-lj-1hr/p228_027-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr/p228_027-pred.wav"></audio></td>
         </tr>
         <tr>
-          <td style="width:30%;" class="transcript">“including a few of major importance.”</td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ours_20min_hq/LJ021-0119.wav"></audio></td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ours_10min_hq/LJ021-0119.wav"></audio></td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ground_truth/LJ021-0119.wav"></audio></td>
+          <td></td>
+          <td><center>(n-1) Ours</center></td>
+          <td><center>(n-2) Ours</center></td>
+          <td><center>(n-3) Ours</center></td>
+          <td><center>(n-4) Ours</center></td>
+          <td><center>(c-1) Ours</center></td>
+          <td><center>(c-2) Ours</center></td>
+          <td><center>(c-3) Ours</center></td>
         </tr>
         <tr>
-          <td style="width:30%;" class="transcript">“Here once more the almost invariable modern practice is in opposition to a natural sense of proportion.”</td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ours_20min_hq/LJ001-0148.wav"></audio></td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ours_10min_hq/LJ001-0148.wav"></audio></td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ground_truth/LJ001-0148.wav"></audio></td>
+          <td style="width:20%;" class="transcript"> </td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr-clean/p228_027-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr-clean-plus-noisy/p228_027-pred.wav"></audio>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-clean/p228_027-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-clean-plus-noisy/p228_027-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-char/p228_027-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-mlj-1hr-char/p228_027-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-flj-1hr-char/p228_027-pred.wav"></audio></td>
         </tr>
-        <tr>
-          <td style="width:30%;" class="transcript">“It is, moreover, true that all living forms are but series of modifications and extensions of one single plan of structure.”</td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ours_20min_hq/LJ027-0011.wav"></audio></td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ours_10min_hq/LJ027-0011.wav"></audio></td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ground_truth/LJ027-0011.wav"></audio></td>
-        </tr>
-        <tr>
-          <td style="width:30%;" class="transcript">“The miserable wretch during the whole of this time was struggling with the most determined violence, to the great horror of the spectators.”</td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ours_20min_hq/LJ009-0255.wav"></audio></td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ours_10min_hq/LJ009-0255.wav"></audio></td>
-          <td style="width:23%;"><audio controls style="width:100%;"><source src="samples/ground_truth/LJ009-0255.wav"></audio></td>
-        </tr>
-       
       </table>
+      <br><br>
+      <table style="width:96%;">
+        <tr>
+          <td></td>
+          <td><center>(b-1) Ground Truth</center></td>
+          <td><center>(b-2) Tacotorn-2</center></td>
+          <td><center>(b-3) Tacotorn-2</center></td>
+          <td><center>(s-1) Sp-chain</center></td>
+          <td><center>(s-2) Ours</center></td>
+          <td><center>(s-3) Sp-chain</center></td>
+          <td><center>(s-4) Ours</center></td>
+        </tr>
+        <tr>
+          <td style="width:20%;" class="transcript">“How do you get it back?”</td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/gt/p228_027.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/fully-sup/p236_299-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/fully-sup-1hr/p236_299-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/sp-chain-vctk-1hr/p236_299-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr/p236_299-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/sp-chain-lj-1hr/p236_299-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr/p236_299-pred.wav"></audio></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><center>(n-1) Ours</center></td>
+          <td><center>(n-2) Ours</center></td>
+          <td><center>(n-3) Ours</center></td>
+          <td><center>(n-4) Ours</center></td>
+          <td><center>(c-1) Ours</center></td>
+          <td><center>(c-2) Ours</center></td>
+          <td><center>(c-3) Ours</center></td>
+        </tr>
+        <tr>
+          <td style="width:20%;" class="transcript"> </td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr-clean/p236_299-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr-clean-plus-noisy/p236_299-pred.wav"></audio>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-clean/p236_299-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-clean-plus-noisy/p236_299-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-char/p236_299-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-mlj-1hr-char/p236_299-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-flj-1hr-char/p236_299-pred.wav"></audio></td>
+        </tr>
+      </table>
+
+      <br><br>
+      <table style="width:96%;">
+        <tr>
+          <td></td>
+          <td><center>(b-1) Ground Truth</center></td>
+          <td><center>(b-2) Tacotorn-2</center></td>
+          <td><center>(b-3) Tacotorn-2</center></td>
+          <td><center>(s-1) Sp-chain</center></td>
+          <td><center>(s-2) Ours</center></td>
+          <td><center>(s-3) Sp-chain</center></td>
+          <td><center>(s-4) Ours</center></td>
+        </tr>
+        <tr>
+          <td style="width:20%;" class="transcript">“They did the right thing.”</td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/gt/p236_420.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/fully-sup/p236_420-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/fully-sup-1hr/p236_420-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/sp-chain-vctk-1hr/p236_420-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr/p236_420-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/sp-chain-lj-1hr/p236_420-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr/p236_420-pred.wav"></audio></td>
+          
+        </tr>
+        <tr>
+          <td></td>
+          <td><center>(n-1) Ours</center></td>
+          <td><center>(n-2) Ours</center></td>
+          <td><center>(n-3) Ours</center></td>
+          <td><center>(n-4) Ours</center></td>
+          <td><center>(c-1) Ours</center></td>
+          <td><center>(c-2) Ours</center></td>
+          <td><center>(c-3) Ours</center></td>
+        </tr>
+        <tr>
+          <td style="width:20%;" class="transcript"> </td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr-clean/p236_420-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr-clean-plus-noisy/p236_420-pred.wav"></audio>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-clean/p236_420-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-clean-plus-noisy/p236_420-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-char/p236_420-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-mlj-1hr-char/p236_420-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-flj-1hr-char/p236_420-pred.wav"></audio></td>
+        </tr>
+      </table>
+      <br><br>
+      <table style="width:96%;">
+        <tr>
+          <td></td>
+          <td><center>(b-1) Ground Truth</center></td>
+          <td><center>(b-2) Tacotorn-2</center></td>
+          <td><center>(b-3) Tacotorn-2</center></td>
+          <td><center>(s-1) Sp-chain</center></td>
+          <td><center>(s-2) Ours</center></td>
+          <td><center>(s-3) Sp-chain</center></td>
+          <td><center>(s-4) Ours</center></td>
+        </tr>
+        <tr>
+          <td style="width:20%;" class="transcript">“Friday night was a pretty good night.”</td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/gt/p238_307.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/fully-sup/p238_307-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/fully-sup-1hr/p238_307-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/sp-chain-vctk-1hr/p238_307-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr/p238_307-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/sp-chain-lj-1hr/p238_307-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr/p238_307-pred.wav"></audio></td>
+          
+        </tr>
+        <tr>
+          <td></td>
+          <td><center>(n-1) Ours</center></td>
+          <td><center>(n-2) Ours</center></td>
+          <td><center>(n-3) Ours</center></td>
+          <td><center>(n-4) Ours</center></td>
+          <td><center>(c-1) Ours</center></td>
+          <td><center>(c-2) Ours</center></td>
+          <td><center>(c-3) Ours</center></td>
+        </tr>
+        <tr>
+          <td style="width:20%;" class="transcript"> </td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr-clean/p238_307-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr-clean-plus-noisy/p238_307-pred.wav"></audio>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-clean/p238_307-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-clean-plus-noisy/p238_307-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-char/p238_307-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-mlj-1hr-char/p238_307-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-flj-1hr-char/p238_307-pred.wav"></audio></td>
+        </tr>
+      </table>
+      <br><br>
+      <table style="width:96%;">
+        <tr>
+          <td></td>
+          <td><center>(b-1) Ground Truth</center></td>
+          <td><center>(b-2) Tacotorn-2</center></td>
+          <td><center>(b-3) Tacotorn-2</center></td>
+          <td><center>(s-1) Sp-chain</center></td>
+          <td><center>(s-2) Ours</center></td>
+          <td><center>(s-3) Sp-chain</center></td>
+          <td><center>(s-4) Ours</center></td>
+        </tr>
+        <tr>
+          <td style="width:20%;" class="transcript">“You could feel the heat.”</td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/gt/p250_207.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/fully-sup/p250_207-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/fully-sup-1hr/p250_207-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/sp-chain-vctk-1hr/p250_207-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr/p250_207-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/sp-chain-lj-1hr/p250_207-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr/p250_207-pred.wav"></audio></td>
+          
+        </tr>
+        <tr>
+          <td></td>
+          <td><center>(n-1) Ours</center></td>
+          <td><center>(n-2) Ours</center></td>
+          <td><center>(n-3) Ours</center></td>
+          <td><center>(n-4) Ours</center></td>
+          <td><center>(c-1) Ours</center></td>
+          <td><center>(c-2) Ours</center></td>
+          <td><center>(c-3) Ours</center></td>
+        </tr>
+        <tr>
+          <td style="width:20%;" class="transcript"> </td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr-clean/p250_207-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-vctk-1hr-clean-plus-noisy/p250_207-pred.wav"></audio>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-clean/p250_207-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-clean-plus-noisy/p250_207-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-lj-1hr-char/p250_207-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-mlj-1hr-char/p250_207-pred.wav"></audio></td>
+          <td style="width:10%;"><audio controls style="width:100%;"><source src="samples/ours-flj-1hr-char/p250_207-pred.wav"></audio></td>
+        </tr>
+      </table>
+
+
     </div>
     <br>
     <!-- <div align="center">Anchor Rat, all rights reserved</div> -->
